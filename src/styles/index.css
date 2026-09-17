@@ -1,0 +1,240 @@
+/* =========================================================================
+   CINEMATIC DESIGN SYSTEM & GLOBAL STYLES
+   For Likhitha — A Love Story Written in the Stars
+   ========================================================================= */
+
+:root {
+  /* Cinematic Color Palette */
+  --bg-abyss: #060407;
+  --bg-noir: #090508;
+  --bg-burgundy: #13070f;
+  --bg-wine: #220b1b;
+  --bg-card: rgba(26, 12, 21, 0.55);
+  --bg-card-hover: rgba(45, 18, 36, 0.7);
+  --bg-glass: rgba(18, 9, 15, 0.65);
+  --bg-glass-heavy: rgba(12, 6, 10, 0.85);
+
+  /* Emotional Accent Tones */
+  --rose-muted: #df889d;
+  --rose-soft: #f0a8b9;
+  --rose-deep: #a83d58;
+  --wine-vibrant: #881a38;
+  --gold-champagne: #d8aa72;
+  --gold-soft: #f4cf9b;
+  --gold-dim: #997548;
+
+  /* Typography Colors */
+  --text-ivory: #faf4ed;
+  --text-cream: #ece0d6;
+  --text-mist: #b5a49c;
+  --text-muted: #7d6b63;
+  --text-dim: #4d403a;
+
+  /* Borders & Glows */
+  --border-subtle: rgba(223, 136, 157, 0.12);
+  --border-medium: rgba(223, 136, 157, 0.25);
+  --border-gold: rgba(216, 170, 114, 0.3);
+  --glow-rose: 0 0 40px -10px rgba(223, 136, 157, 0.35);
+  --glow-wine: 0 0 60px -10px rgba(136, 26, 56, 0.45);
+  --glow-gold: 0 0 45px -10px rgba(216, 170, 114, 0.35);
+
+  /* Fonts */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Layout */
+  --max-width: 1200px;
+  --content-padding: clamp(1.25rem, 5vw, 4rem);
+}
+
+/* Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  background-color: var(--bg-abyss);
+  color: var(--text-ivory);
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  position: relative;
+  background: radial-gradient(circle at 50% 0%, #160812 0%, var(--bg-abyss) 60%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-abyss);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(223, 136, 157, 0.25);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(223, 136, 157, 0.5);
+}
+
+/* 35mm Subtle Film Grain Overlay */
+.film-grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Typography Utility Classes */
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #faeedd 0%, var(--gold-champagne) 60%, #b8864d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rose-gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, var(--rose-muted) 60%, var(--rose-deep) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding);
+}
+
+/* Glassmorphic Panel */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+  box-shadow: var(--glow-wine), 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+}
+
+/* Base Interactive Button */
+.btn-cinematic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, rgba(34, 11, 27, 0.9), rgba(58, 17, 39, 0.9));
+  border: 1px solid var(--border-medium);
+  color: var(--text-ivory);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 0.9rem 2.25rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cinematic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-cinematic:hover::before {
+  left: 100%;
+}
+
+.btn-cinematic:hover {
+  border-color: var(--rose-muted);
+  box-shadow: var(--glow-rose), 0 8px 30px rgba(136, 26, 56, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-cinematic:active {
+  transform: translateY(0);
+}
+
+/* Glow Pill Label */
+.chapter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rose-muted);
+  background: rgba(223, 136, 157, 0.08);
+  border: 1px solid rgba(223, 136, 157, 0.2);
+  padding: 0.4rem 1.1rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+/* Accessible Focus States */
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--rose-muted);
+  outline-offset: 4px;
+}
+
+/* Reduced Motion Query */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
