@@ -454,7 +454,7 @@ That is what you do to me. You turn ordinary, mundane hours into pure gold. If y
     teaser: "There's one more thing.",
     openPrompt: "OPEN IT ❤️",
     revelations: [
-      "I Love Youu Sooo Muchhh Nannaaaaaa 🥰💖💝😚🫂",
+      "I Love Youuuu Sooooo Muchhhh Nannaaaaaa 🥰💖💝😚🫂",
       "If I had to live this life again...",
       "I'd still want to meet you.",
       "And I'd still choose you.",
