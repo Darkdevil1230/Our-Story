@@ -41,7 +41,6 @@ class AmbientSynthesizer {
     }
 
     // Warm chords in F Major / D Minor (Hz)
-    // F3 (174.61), A3 (220.00), C4 (261.63), E4 (329.63), G4 (392.00)
     const chordProgressions = [
       [174.61, 220.00, 261.63, 329.63], // Fmaj7
       [146.83, 220.00, 261.63, 349.23], // Dm7
@@ -71,7 +70,6 @@ class AmbientSynthesizer {
 
       osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
       osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-      // Detune slightly for lush warmth
       osc.detune.setValueAtTime((idx - 1.5) * 4, this.ctx.currentTime);
 
       oscGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
@@ -89,7 +87,6 @@ class AmbientSynthesizer {
     if (!this.ctx || !this.isPlaying) return;
     const now = this.ctx.currentTime;
 
-    // Fade old oscillators
     this.oscillators.forEach(({ osc, gain }) => {
       try {
         gain.gain.cancelScheduledValues(now);
@@ -101,7 +98,6 @@ class AmbientSynthesizer {
     });
     this.oscillators = [];
 
-    // Start new chord
     frequencies.forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       const oscGain = this.ctx.createGain();
@@ -153,71 +149,63 @@ class AmbientSynthesizer {
 
 export function useAmbientAudio(audioSrc = '/audio/our-song.mp3') {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [usingFallback, setUsingFallback] = useState(false);
+  const [isSynthesized, setIsSynthesized] = useState(false);
   const audioRef = useRef(null);
   const synthRef = useRef(null);
 
   useEffect(() => {
-    // Initialize audio element
-    const audio = new Audio();
-    audio.src = audioSrc;
-    audio.loop = true;
-    audio.volume = 0.35;
-    audioRef.current = audio;
-
-    audio.addEventListener('error', () => {
-      // If MP3 fails or does not exist, switch smoothly to synth
-      setUsingFallback(true);
-    });
-
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
-        audioRef.current.src = '';
+        audioRef.current = null;
       }
       if (synthRef.current) {
         synthRef.current.stop();
       }
     };
-  }, [audioSrc]);
+  }, []);
 
   const toggleAudio = useCallback(() => {
     if (isPlaying) {
-      // Pause
-      if (usingFallback && synthRef.current) {
-        synthRef.current.stop();
-      } else if (audioRef.current) {
+      // Pause playback
+      if (audioRef.current) {
         audioRef.current.pause();
+      }
+      if (synthRef.current) {
+        synthRef.current.stop();
       }
       setIsPlaying(false);
     } else {
-      // Start Playing
-      if (usingFallback) {
-        if (!synthRef.current) {
-          synthRef.current = new AmbientSynthesizer();
-        }
-        synthRef.current.start();
-        setIsPlaying(true);
-      } else if (audioRef.current) {
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              setIsPlaying(true);
-            })
-            .catch(() => {
-              // File might be missing or blocked, trigger fallback synth
-              setUsingFallback(true);
-              if (!synthRef.current) {
-                synthRef.current = new AmbientSynthesizer();
-              }
-              synthRef.current.start();
-              setIsPlaying(true);
-            });
-        }
+      // User clicked Play: attempt to play real MP3 first
+      if (!audioRef.current) {
+        const audio = new Audio();
+        audio.src = audioSrc;
+        audio.loop = true;
+        audio.volume = 0.5;
+        audioRef.current = audio;
+      }
+
+      const audio = audioRef.current;
+      const playPromise = audio.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+            setIsSynthesized(false);
+          })
+          .catch((err) => {
+            console.log('Audio file failed or missing, using ambient synth fallback:', err);
+            if (!synthRef.current) {
+              synthRef.current = new AmbientSynthesizer();
+            }
+            synthRef.current.start();
+            setIsPlaying(true);
+            setIsSynthesized(true);
+          });
       }
     }
-  }, [isPlaying, usingFallback]);
+  }, [isPlaying, audioSrc]);
 
-  return { isPlaying, toggleAudio, isSynthesized: usingFallback };
+  return { isPlaying, toggleAudio, isSynthesized };
 }
